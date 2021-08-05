@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Api(value = "API REST Clientes")
@@ -36,7 +37,7 @@ public class ClienteController {
     @ApiOperation(value = "Salva um novo Cliente")
     @ApiResponse(code = 201, message = "Retorna um novo cliente")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ClienteDTO> salva(@RequestBody ClienteDTO dto) throws ErroNegocialException {
+    public ResponseEntity<ClienteDTO> salva(@Valid @RequestBody ClienteDTO dto) throws ErroNegocialException {
         return new ResponseEntity<>(service.salva(dto), HttpStatus.CREATED);
     }
 
@@ -46,7 +47,7 @@ public class ClienteController {
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE,
            path = "/{id}")
-    public ResponseEntity<ClienteDTO> atualiza(@RequestBody ClienteDTO dto, @PathVariable("id") long id) throws ErroNegocialException {
+    public ResponseEntity<ClienteDTO> atualiza(@Valid @RequestBody ClienteDTO dto, @PathVariable("id") long id) throws ErroNegocialException {
         return new ResponseEntity<>(service.atualiza(dto, id), HttpStatus.OK);
     }
 

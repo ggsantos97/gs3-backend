@@ -23,7 +23,11 @@ public class EmailDTO implements Serializable {
         this.endereco = endereco;
     }
 
-//    public EmailDTO(@Email String endereco) {
-//        this.endereco = endereco;
-//    }
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 }

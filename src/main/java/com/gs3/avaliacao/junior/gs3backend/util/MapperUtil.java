@@ -222,7 +222,7 @@ public class MapperUtil {
         EmailDTO emailDTO = new EmailDTO();
 
         emailDTO.setEndereco( email.getEndereco() );
-
+        emailDTO.setId(email.getId());
         return emailDTO;
     }
 
