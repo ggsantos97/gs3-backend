@@ -5,5 +5,10 @@ import com.gs3.avaliacao.junior.gs3backend.entity.Email;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface EmailMapper extends AbstractMapper<Email, EmailDTO> {
+public interface EmailMapper {
+
+
+    Email toEntity(EmailDTO dto);
+
+    EmailDTO toDTO(Email entity);
 }

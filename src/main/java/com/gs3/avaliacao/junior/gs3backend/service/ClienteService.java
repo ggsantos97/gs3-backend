@@ -5,11 +5,14 @@ import com.gs3.avaliacao.junior.gs3backend.entity.Cliente;
 import com.gs3.avaliacao.junior.gs3backend.exception.EnumMensagens;
 import com.gs3.avaliacao.junior.gs3backend.exception.ErroNegocialException;
 import com.gs3.avaliacao.junior.gs3backend.mappers.ClienteMapper;
+import com.gs3.avaliacao.junior.gs3backend.mappers.EnderecoMapper;
 import com.gs3.avaliacao.junior.gs3backend.repository.ClienteRepository;
+import com.gs3.avaliacao.junior.gs3backend.util.MapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClienteService implements IClienteService{
@@ -18,20 +21,25 @@ public class ClienteService implements IClienteService{
     private ClienteRepository repository;
     @Autowired
     private ClienteMapper mapper;
+    @Autowired
+    EnderecoMapper enderecoMapper;
 
     public List<ClienteDTO> buscaTodos() throws ErroNegocialException{
         List<Cliente> clientes = repository.findAll();
         if(clientes.isEmpty()){
             throw new ErroNegocialException(EnumMensagens.NENHUM_CLIENTE_ENCONTRADO);
         }
-        return mapper.toDtoList(clientes);
+        List<ClienteDTO> dtos = MapperUtil.toDtoList(clientes);
+        return dtos;
     }
 
     @Override
-    public ClienteDTO salvaOuAtualiza(ClienteDTO dto) throws ErroNegocialException{
+    public ClienteDTO salva(ClienteDTO dto) throws ErroNegocialException{
        try {
-        Cliente entity = mapper.toEntity(dto);
-          return mapper.toDTO(repository.save(entity));
+        Cliente entity = MapperUtil.toEntity(dto);
+        //entity.getEndereco().setCliente(entity);
+           entity = repository.save(entity);
+          return MapperUtil.toDTO(entity);
        } catch (Exception ex){
            throw new ErroNegocialException(ex.getMessage(), ex.getCause().getLocalizedMessage());
        }
@@ -39,7 +47,25 @@ public class ClienteService implements IClienteService{
     }
 
     @Override
-    public void exclui(long id)throws ErroNegocialException{
+    public ClienteDTO atualiza(ClienteDTO dto, long id) throws ErroNegocialException {
+      Optional<Cliente> cliente = repository.findById(id);
+      if(cliente.isPresent()){
+          MapperUtil.updateModelCliente(dto, cliente.get());
+        Cliente retorno =  repository.save(cliente.get());
+        return MapperUtil.toDTO(retorno);
+      } else {
+          throw new ErroNegocialException(EnumMensagens.NENHUM_CLIENTE_ENCONTRADO);
+      }
+    }
 
+    @Override
+    public String exclui(long id)throws ErroNegocialException{
+        Optional<Cliente> cliente = repository.findById(id);
+        if(cliente.isPresent()){
+            repository.delete(cliente.get());
+            return "Cliente Excluído com sucesso!";
+        } else {
+            throw new ErroNegocialException(EnumMensagens.NENHUM_CLIENTE_ENCONTRADO);
+        }
     }
 }

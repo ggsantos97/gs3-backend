@@ -1,9 +1,13 @@
 package com.gs3.avaliacao.junior.gs3backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 //
 //@Getter
@@ -22,10 +26,10 @@ public class ClienteDTO implements Serializable {
     @NotBlank(message = "CPF Obrigatório")
     private String cpf;
 
-    //@NotNull
+    @NotNull
     private EnderecoDTO endereco;
 
-    //@NotNull
+    @NotEmpty
     private Set<TelefoneDTO> telefones;
 
     @NotEmpty
@@ -78,4 +82,13 @@ public class ClienteDTO implements Serializable {
     public void setEmails(Set<EmailDTO> emails) {
         this.emails = emails;
     }
+
+//    public ClienteDTO(long id, @NotBlank(message = "Nome Obrigatório") @Size(min = 3, max = 100) String nome, @NotBlank(message = "CPF Obrigatório") String cpf, EnderecoDTO endereco, Set<TelefoneDTO> telefones, @NotEmpty Set<EmailDTO> emails) {
+//        this.id = id;
+//        this.nome = nome;
+//        this.cpf = cpf;
+//        this.endereco = endereco;
+//        this.telefones = telefones;
+//        this.emails = emails;
+//    }
 }

@@ -1,6 +1,10 @@
 package com.gs3.avaliacao.junior.gs3backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -14,6 +18,7 @@ import java.util.Set;
 @Entity
 public class Cliente implements Serializable {
 
+
     @Id()
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  long id;
@@ -24,18 +29,21 @@ public class Cliente implements Serializable {
     @Column
     private String cpf;
 
+    @JsonIgnoreProperties({"endereco"})
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "cliente")
     @NotNull
     private Endereco endereco;
 
-    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "id_cliente_FK")
-    //@NoEmpty
-    private Set<Telefone> telefones = new HashSet<>();
 
     @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "id_cliente_FK")
-    //@NotNull
+    @NotEmpty
+
+    private Set<Telefone> telefones = new HashSet<>();
+
+    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
+    @NotEmpty
+    @JoinColumn(name = "id_cliente_FK")
     private Set<Email> emails = new HashSet<>();
 
     public long getId() {

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,26 +25,38 @@ public class ClienteController {
     @Autowired
     private ClienteService service;
 
-    @GetMapping(produces = "aplication/json")
-    @ApiOperation(value = "Retorna uma Lista de Clientes",
-                response = Cliente.class,
-                responseContainer = "List"
-                )
+    //@PreAuthorize("hasRole('ADMIN','USER')")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Retorna uma Lista de Clientes")
     @ResponseBody
     public ResponseEntity<List<ClienteDTO>> buscaTodosClientes() throws ErroNegocialException {
         return new ResponseEntity<>(service.buscaTodos(), HttpStatus.OK);
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "Salva um novo Cliente")
     @ApiResponse(code = 201, message = "Retorna um novo cliente")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Cliente> salvaOuAtualizaCliente(@RequestBody Cliente dto) throws ErroNegocialException {
-        return new ResponseEntity<>(dto, HttpStatus.CREATED);
-        //return new ResponseEntity<>(service.salvaOuAtualiza(dto), HttpStatus.CREATED);
+    public ResponseEntity<ClienteDTO> salva(@RequestBody ClienteDTO dto) throws ErroNegocialException {
+        return new ResponseEntity<>(service.salva(dto), HttpStatus.CREATED);
     }
-    @PostMapping(path = "/teste",
-            produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE)
-    public EmailDTO teste(@RequestBody EmailDTO dto){
-        return  dto;
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @ApiOperation(value = "Atualiza um Cliente")
+    @ApiResponse(code = 204, message = "Retorna um novo cliente")
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+           path = "/{id}")
+    public ResponseEntity<ClienteDTO> atualiza(@RequestBody ClienteDTO dto, @PathVariable("id") long id) throws ErroNegocialException {
+        return new ResponseEntity<>(service.atualiza(dto, id), HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @ApiOperation(value = "Exclui um Cliente")
+    @ApiResponse(code = 204, message = "Exclui um cliente")
+    @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE,
+            path = "/{id}")
+    public ResponseEntity<String> exclui(@PathVariable("id") long id) throws ErroNegocialException {
+        return new ResponseEntity<>(service.exclui( id), HttpStatus.NO_CONTENT);
+    }
+
 }

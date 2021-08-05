@@ -1,5 +1,7 @@
 package com.gs3.avaliacao.junior.gs3backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -16,7 +18,7 @@ public class Endereco implements Serializable {
     private long id;
 
     @Column
-    private int cep;
+    private String cep;
 
     @Column
     private String logradouro;
@@ -33,8 +35,10 @@ public class Endereco implements Serializable {
     @Column
     private String complemento;
 
-    @OneToOne
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cliente_FK")
+    @JsonIgnore
     private Cliente cliente;
 
     public long getId() {
@@ -45,11 +49,11 @@ public class Endereco implements Serializable {
         this.id = id;
     }
 
-    public int getCep() {
+    public String getCep() {
         return cep;
     }
 
-    public void setCep(int cep) {
+    public void setCep(String cep) {
         this.cep = cep;
     }
 
@@ -97,6 +101,7 @@ public class Endereco implements Serializable {
         return cliente;
     }
 
+    @JsonIgnore
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }

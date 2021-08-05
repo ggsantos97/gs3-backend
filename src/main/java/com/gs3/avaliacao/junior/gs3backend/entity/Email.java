@@ -1,6 +1,9 @@
 package com.gs3.avaliacao.junior.gs3backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.io.Serializable;
 
 //@Getter
 //@Setter
@@ -8,7 +11,7 @@ import javax.persistence.*;
 //@NoArgsConstructor
 @Entity
 @Table
-public class Email {
+public class Email implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -16,4 +19,22 @@ public class Email {
 
     @Column
     private String endereco;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
+
 }

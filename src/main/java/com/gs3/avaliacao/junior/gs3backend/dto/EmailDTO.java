@@ -8,20 +8,22 @@ import lombok.Setter;
 import javax.validation.constraints.Email;
 import java.io.Serializable;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+
 public class EmailDTO implements Serializable {
 
+    private long id;
     @Email
     private String endereco;
 
-//    public String getEndereco() {
-//        return endereco;
-//    }
-//
-//    public void setEndereco(String endereco) {
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
+//    public EmailDTO(@Email String endereco) {
 //        this.endereco = endereco;
 //    }
 }

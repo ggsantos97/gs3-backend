@@ -4,7 +4,8 @@ package com.gs3.avaliacao.junior.gs3backend.exception;
 //@Setter
 public enum EnumMensagens {
     ERRO_APLICACAO("000","Erro ao executar"),
-    NENHUM_CLIENTE_ENCONTRADO("001", "Nenhum Cliente encontrado na Base!");
+    NENHUM_CLIENTE_ENCONTRADO("001", "Nenhum Cliente encontrado na Base!"),
+    CLIENTE_NAO_EXISTE("002","Cliente a ser alterado não existe");
 
     String  codigo;
     String  mensagem;
